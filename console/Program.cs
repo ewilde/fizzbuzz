@@ -23,10 +23,9 @@ namespace console
             var result = CommandLine.Parser.Default.ParseArguments(args, options);
             if (result)
             {
-                Console.WriteLine("Start {0} - end {1}.", options.Start, options.End);
+                new Program(options).Run();            
             }
 
-            new Program(options).Run();
             Console.ReadKey();
         }
 
