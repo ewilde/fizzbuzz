@@ -89,10 +89,36 @@ namespace FizzBuzzTests
                 Result.ElementAt(Index(15)).ShouldEqual("fizzbuzz");
             };
 
+        It should_produce_an_entire_output_that_matches_the_test_pattern = () =>
+            Result.Aggregate((current, next) => current + " " + next)
+                    .ShouldEqual("1 2 fizz 4 buzz fizz 7 8 fizz buzz 11 fizz 13 14 fizzbuzz 16 17 fizz 19 buzz");
+
         static int Index(int value)
         {
             return value - 1;
         }
+    }
+
+    [Subject(typeof(Engine), "Statistics")]
+    public class when_reporting_the_statistics_of_a_fizz_buzz_run : WithSubject<Engine>
+    {
+        Establish context = () =>
+           With(new EngineContext(1, 20));
+
+        Because of = () =>
+            Subject.Generate();
+
+        It should_correctly_determine_the_number_of_fizz_occurances = () =>
+            Subject.GetStatisticsForWord("fizz").ShouldEqual(5);
+
+        It should_correctly_determine_the_number_of_buzz_occurances = () =>
+            Subject.GetStatisticsForWord("buzz").ShouldEqual(3);
+
+        It should_correctly_determine_the_number_of_fizzbuzz_occurances = () =>
+            Subject.GetStatisticsForWord("fizzbuzz").ShouldEqual(1);
+
+        It should_correctly_determine_the_number_of_integer_occurances = () =>
+            Subject.GetStatisticsForIntegers().ShouldEqual(11);
     }
 
     internal class EngineContext : ContextBase
